@@ -208,10 +208,10 @@ describe('SolanaStorageAdapter', () => {
         });
 
         test('should throw and log error on failure', async () => {
-            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce((connection, transaction, signers) => {
+            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce(() => {
                 throw new Error('Create failed');
             });
-            const consoleErrorSpy = jest.spyOn(console, 'error');
+            const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
             await expect(storageAdapter.createEntity(entityData, payer, worldName)).rejects.toThrow('Failed to create entity: Create failed');
             expect(consoleErrorSpy).toHaveBeenCalledWith('Error in SolanaStorageAdapter.createEntity:', expect.any(Error));
             consoleErrorSpy.mockRestore();
@@ -251,7 +251,7 @@ describe('SolanaStorageAdapter', () => {
 
         test('should return null and log error on failure', async () => {
             mockGetAccountInfo.mockRejectedValueOnce(new Error('Get failed'));
-            const consoleErrorSpy = jest.spyOn(console, 'error');
+            const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
             const data = await storageAdapter.getEntityDataById(entityId, worldName);
             expect(data).toBeNull();
             expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching data from SolanaStorageAdapter:', expect.any(Error));
@@ -283,10 +283,10 @@ describe('SolanaStorageAdapter', () => {
         });
 
         test('should throw and log error on failure', async () => {
-            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce((connection, transaction, signers) => {
+            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce(() => {
                 throw new Error('Set failed');
             });
-            const consoleErrorSpy = jest.spyOn(console, 'error');
+            const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
             await expect(storageAdapter.setEntityDataById(entityId, newData, payer, worldName)).rejects.toThrow('Failed to set entity data: Set failed');
             expect(consoleErrorSpy).toHaveBeenCalledWith('Error in SolanaStorageAdapter.setEntityDataById for entityId "testEntity123":', expect.any(Error));
             consoleErrorSpy.mockRestore();
@@ -316,10 +316,10 @@ describe('SolanaStorageAdapter', () => {
         });
 
         test('should throw and log error on failure', async () => {
-            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce((connection, transaction, signers) => {
+            jest.spyOn(require('@solana/web3.js'), 'sendAndConfirmTransaction').mockImplementationOnce(() => {
                 throw new Error('Delete failed');
             });
-            const consoleErrorSpy = jest.spyOn(console, 'error');
+            const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
             await expect(storageAdapter.deleteEntityById(entityId, payer, worldName)).rejects.toThrow('Failed to delete entity: Delete failed');
             expect(consoleErrorSpy).toHaveBeenCalledWith('Error in SolanaStorageAdapter.deleteEntityById for entityId "testEntity123":', expect.any(Error));
             consoleErrorSpy.mockRestore();

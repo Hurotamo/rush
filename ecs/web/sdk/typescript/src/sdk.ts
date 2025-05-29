@@ -2,7 +2,7 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 import { Storage } from "./modules/storage/storage";
 import { ITsSdkParams } from "./types/types";
 
-export type ComponentValue = string | number | boolean | BigInt;
+export type ComponentValue = string | number | boolean | bigint;
 
 export class RushSdk {
   private keypair: Keypair;
@@ -30,7 +30,7 @@ export class RushSdk {
         typeof component !== "bigint"
       ) {
         throw new Error(
-          `TypeMismatchError: Expected one of [string, number, boolean, BigInt] but received ${typeof component}`
+          `TypeMismatchError: Expected one of [string, number, boolean, bigint] but received ${typeof component}`
         );
       }
 

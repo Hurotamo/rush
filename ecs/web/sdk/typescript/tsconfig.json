@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "ES6",
+		"target": "es2020",
 		// "target": "ES5",
 		"module": "commonjs",
 		// "module": "NodeNext",
@@ -8,14 +8,21 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"lib": ["ES6", "DOM"],
 		"moduleResolution": "node",
+		"lib": ["es2020", "dom"],
 		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
 		"outDir": "./dist",
-		"rootDir": "./src",
-		"types": ["./src/types/types.d.ts", "node", "jest"] // Added jest to the types field
+		"rootDir": ".",
+		"baseUrl": ".",
+		"paths": {
+			"@src/*": ["src/*"],
+			"@test/*": ["test/*"]
+		},
+		"types": ["node", "jest"]
 	},
-	"include": ["*/.d.ts", "src/**/*.ts"],
-	"exclude": ["node_modules"]
+	"include": ["src/**/*.ts", "test/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
 }
 

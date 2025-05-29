@@ -1,4 +1,4 @@
-export interface Storage {
+export interface IStorage {
     /**
      * Migrates the storage schema or performs any necessary upgrades.
      */

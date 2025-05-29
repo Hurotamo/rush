@@ -20,9 +20,8 @@ export class Storage {
 	constructor({ blueprint, programId, signer, rpcUrl }: IStorage) {
 		let blueprintPath = "";
 		// TODO: initialize the blueprint
-		let bluprint = (this.blueprint = blueprint);
+		this.blueprint = blueprint;
 		this.programId = programId;
-		this.signer = signer;
 		this.signer = signer;
 		this.rpcUrl = rpcUrl;
 	}
@@ -193,7 +192,7 @@ export class Storage {
 	/**
 	 * get function
 	 * /// TODO: DONE RULE: The Game Developer must be able to retrieve specific entity
-	 * data from their game’s On-chain world
+	 * data from their game's On-chain world
 	 */
 	public async get(entityId: string) {
 		console.log("get method");
@@ -243,7 +242,7 @@ export class Storage {
 	/**
 	 * set function
 	 * /// TODO: DONE RULE: The Game Developer must be able to update a specific entity data
-	 * from their game’s Onchain world
+	 * from their game's Onchain world
 	 */
 	public async set(
 		entityId: string,
@@ -297,15 +296,15 @@ export class Storage {
 }
 
 async function test() {
-	let Path = "";
-	let PubKey = "";
+	let testPath = "";
+	let pubKey = "";
 	let keypair: Keypair;
 
 	//! declare a keypair in a json file named <> with a publicKey and secretKey value pair
 
 	// ? this one should be dynamic, auto generated after a sign-in of the wallet is engaged
 	const KEYPAIR_PATH = path.join(__dirname, "SAMPLE_PAIR.json");
-	Path = KEYPAIR_PATH;
+	testPath = KEYPAIR_PATH;
 
 	if (!fs.existsSync(KEYPAIR_PATH)) {
 		keypair = Keypair.generate();
@@ -321,9 +320,9 @@ async function test() {
 		const KEYPAIR_JSON = JSON.parse(fs.readFileSync(KEYPAIR_PATH, "utf-8"));
 		const SECRET_KEY = Uint8Array.from(KEYPAIR_JSON.secretKey);
 		keypair = Keypair.fromSecretKey(SECRET_KEY);
-		PubKey = keypair.publicKey.toBase58();
+		pubKey = keypair.publicKey.toBase58();
 		// notice
-		console.log("Loaded keypair with public key: ", PubKey);
+		console.log("Loaded keypair with public key: ", pubKey);
 	}
 
 	const programId = keypair.publicKey;

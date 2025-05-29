@@ -13,9 +13,39 @@ export interface IBTreeMap {
 	A: string;
 }
 
+// New: Component Schema Definitions
+export type JsonSchemaType = "string" | "number" | "boolean" | "object" | "array" | "null" | "bigint" | "symbol" | "undefined" | "function";
+
+export interface ComponentSchemaProperty {
+    type: JsonSchemaType | JsonSchemaType[];
+    description?: string;
+    optional?: boolean; // Custom: true if property is not in schema's 'required' array
+    // For objects
+    properties?: Record<string, ComponentSchemaProperty>;
+    required?: string[];
+    // For arrays
+    items?: ComponentSchemaProperty | ComponentSchemaProperty[];
+    // For strings
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+    // For numbers
+    minimum?: number;
+    maximum?: number;
+    // Add other JSON schema properties as needed: enum, format, etc.
+}
+
+export interface ComponentSchema extends ComponentSchemaProperty {
+    // A component schema is essentially a ComponentSchemaProperty, typically an object.
+    // Ensure top-level 'type' is usually 'object' for components with fields.
+}
+
 export interface IBluePrint {
 	name: string;
 	description: string;
+    componentSchemas?: Record<string, ComponentSchema>; // New: Defines schemas for component types
+
+    // Original IBTreeMap fields - their role might need to be re-evaluated or used for other metadata
 	entities: IBTreeMap;
 	regions: IBTreeMap;
 	instances: IBTreeMap;

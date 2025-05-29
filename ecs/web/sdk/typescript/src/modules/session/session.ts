@@ -259,12 +259,13 @@ export class SessionAuth implements Auth {
 		}
 
 		// Update transaction with actual lamports after fee deduction
-		transaction.instructions[0].data = Buffer.alloc(8);
-		transaction.instructions[0] = SystemProgram.transfer({
-			fromPubkey: sessionKeypair.publicKey,
-			toPubkey: sendTo,
-			lamports: netRefund,
-		});
+		transaction.instructions = [
+			SystemProgram.transfer({
+				fromPubkey: sessionKeypair.publicKey,
+				toPubkey: sendTo,
+				lamports: netRefund,
+			}),
+		];
 
 		// Send transaction using the session keys
 		const signature = await sendAndConfirmTransaction(

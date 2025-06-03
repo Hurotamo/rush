@@ -9,7 +9,6 @@ import * as fs from 'fs';
 import { SessionAuth } from './modules/session/session';
 import { Auth as AuthPort } from './modules/session/adapters/auth-adapter';
 
-// Define a more specific error class for SDK errors
 export class SDKError extends Error {
     constructor(message: string, public cause?: any) {
         super(message);
@@ -502,7 +501,7 @@ export class RushSDK {
     }
 
     public async saveToChain(): Promise<void> {
-        const payer = this.getActivePayer(); // Use active payer
+        const payer = this.getActivePayer(); 
         // This check is somewhat redundant if getActivePayer throws, but good for defense.
         if (!payer) { 
              throw new SDKError('Payer not available. Cannot save to chain.');
@@ -512,14 +511,14 @@ export class RushSDK {
         // If many entities need to be saved, batch them into fewer transactions
         // to improve performance and reduce transaction fees, respecting Solana transaction size limits.
         try {
-            const entitiesToSave: Entity[] = []; // Collect entities that need saving (e.g., based on dirty flag)
+            const entitiesToSave: Entity[] = []; 
             for (const entity of this.world.query([])) { 
                 // if (entity.isDirty()) { entitiesToSave.push(entity); }
-                entitiesToSave.push(entity); // Placeholder: save all for now
+                entitiesToSave.push(entity); 
             }
 
             for (const entity of entitiesToSave) {
-                await this.saveEntityToChain(entity); // Current: one transaction per entity
+                await this.saveEntityToChain(entity); 
             }
             console.log('World state saved to blockchain.');
         } catch (error) {

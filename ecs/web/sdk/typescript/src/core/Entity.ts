@@ -3,8 +3,7 @@ import { PublicKey } from '@solana/web3.js';
 export class Entity {
     private id: string;
     private components: Map<string, any>;
-    private publicKey: PublicKey; // Or some other identifier relevant to on-chain representation
-
+    private publicKey: PublicKey; 
     constructor(id: string, publicKey: PublicKey) {
         this.id = id;
         this.components = new Map();

@@ -56,9 +56,9 @@ export class SolanaStorageAdapter implements StoragePort {
         }
     }
 
-    public async sendTransaction(transaction: Transaction): Promise<string> {
+    public async sendTransaction(transaction: Transaction, signers: Keypair[]): Promise<string> {
         try {
-            const signature = await this.connection.sendTransaction(transaction, []);
+            const signature = await this.connection.sendTransaction(transaction, signers);
             await this.connection.confirmTransaction(signature, 'confirmed');
             return signature;
         } catch (error: any) {
@@ -116,7 +116,7 @@ export class SolanaStorageAdapter implements StoragePort {
             );
 
             // Send and confirm the transaction using a custom method for testing
-            const signature = await this.sendAndConfirmTransaction(transaction, [payer, entityAccount]);
+            const signature = await this.sendAndConfirmTransaction(transaction, [payer]);
             console.log(`Entity created successfully. Entity Account: ${entityAccount.publicKey.toString()}, Transaction: ${signature}`);
             return signature;
         } catch (error: any) {
@@ -220,9 +220,10 @@ export class SolanaStorageAdapter implements StoragePort {
     public async migrate(worldName: string, payer: Keypair): Promise<string> {
         try {
             // Derive the world PDA using the world name and program ID
-            const worldSeed = Buffer.from(worldName, 'utf8');
+            const worldSeed = Buffer.from('world', 'utf8');
+            const worldNameSeed = Buffer.from(worldName, 'utf8');
             const [worldPda, worldBump] = PublicKey.findProgramAddressSync(
-                [worldSeed],
+                [worldSeed, worldNameSeed],
                 this.programId
             );
             console.log(`Migrating World PDA: ${worldPda.toString()}`);
@@ -235,7 +236,7 @@ export class SolanaStorageAdapter implements StoragePort {
                         { pubkey: worldPda, isSigner: false, isWritable: true }
                     ],
                     programId: this.programId,
-                    data: Buffer.from([worldBump]) // Include bump in data if needed by program
+                    data: Buffer.from([worldBump]) 
                 })
             );
 
@@ -252,9 +253,9 @@ export class SolanaStorageAdapter implements StoragePort {
     // Add a custom method for sending and confirming transactions that can be mocked in tests
     private async sendAndConfirmTransaction(transaction: Transaction, signers: Keypair[]): Promise<string> {
         try {
-            // Use the connection's sendTransaction method
+           
             const signature = await this.connection.sendTransaction(transaction, signers);
-            // Confirm the transaction
+           
             await this.connection.confirmTransaction(signature, 'confirmed');
             return signature;
         } catch (error: any) {

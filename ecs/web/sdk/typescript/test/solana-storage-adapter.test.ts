@@ -244,7 +244,7 @@ describe('SolanaStorageAdapter', () => {
             mockSendTransaction.mockResolvedValueOnce(mockSignature);
             mockConfirmTransaction.mockResolvedValueOnce({});
 
-            const signature = await adapter.sendTransaction(transaction);
+            const signature = await adapter.sendTransaction(transaction, []);
 
             expect(signature).toBe(mockSignature);
             expect(mockSendTransaction).toHaveBeenCalledWith(transaction, expect.any(Array)); 
@@ -256,8 +256,8 @@ describe('SolanaStorageAdapter', () => {
             mockSendTransaction.mockReset();
             mockSendTransaction.mockRejectedValue(new Error('Send failed'));
             const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-            await expect(adapter.sendTransaction(transaction)).rejects.toThrow(SolanaStorageError);
-            await expect(adapter.sendTransaction(transaction)).rejects.toHaveProperty('code', 'TRANSACTION_SEND_ERROR');
+            await expect(adapter.sendTransaction(transaction, [])).rejects.toThrow(SolanaStorageError);
+            await expect(adapter.sendTransaction(transaction, [])).rejects.toHaveProperty('code', 'TRANSACTION_SEND_ERROR');
             expect(consoleErrorSpy).toHaveBeenCalledWith('Error sending transaction from SolanaStorageAdapter:', expect.any(Error));
             consoleErrorSpy.mockRestore();
         });
@@ -473,8 +473,8 @@ describe('SolanaStorageAdapter', () => {
     test('sendTransaction should throw SolanaStorageError on failure', async () => {
         mockSendTransaction.mockRejectedValue(new Error('Network error'));
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-        await expect(adapter.sendTransaction({} as any)).rejects.toThrow(SolanaStorageError);
-        await expect(adapter.sendTransaction({} as any)).rejects.toMatchObject({
+        await expect(adapter.sendTransaction({} as any, [])).rejects.toThrow(SolanaStorageError);
+        await expect(adapter.sendTransaction({} as any, [])).rejects.toMatchObject({
             code: 'TRANSACTION_SEND_ERROR',
             message: expect.stringContaining('Transaction failed'),
         });

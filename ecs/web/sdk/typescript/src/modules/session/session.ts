@@ -12,9 +12,9 @@ import crypto from "crypto";
 
 export class SessionAuth implements Auth {
 	// All variables can be stored in either PDA or just here in the class
-	private connection: Connection; // Connection should be stored or they need to create a connection again
-	private sessionExpiration: number | undefined; // Can store the session Expiration in PDA soon
-	private userPublicKey: PublicKey | undefined = undefined; // This is the user public key Can be stored in PDA or localStorage
+	private connection: Connection; 
+	private sessionExpiration: number | undefined; 
+	private userPublicKey: PublicKey | undefined = undefined; 
 
 	constructor(connection: Connection) {
 		this.connection = connection;
@@ -40,11 +40,9 @@ export class SessionAuth implements Auth {
 		// Can add checker for exisiting session
 		const newSession = Keypair.generate();
 		const encryptedSession = this.encrypt(newSession, data);
-		window.localStorage.setItem("sessionData", this.encryptData(data)); // encrypt the data and store it in the class (soon to be changed to use PDA)
-
-		this.sessionExpiration = Date.now() + 60 * 60 * 1000; // Session expires in 1 hour
-
-		window.localStorage.setItem("session", encryptedSession); // This will store the session in the browser
+		window.localStorage.setItem("sessionData", this.encryptData(data)); 
+		this.sessionExpiration = Date.now() + 60 * 60 * 1000; 
+		window.localStorage.setItem("session", encryptedSession); 
 		return encryptedSession;
 	}
 
